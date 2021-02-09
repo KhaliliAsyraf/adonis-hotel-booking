@@ -4,11 +4,15 @@ const { test, trait } = use('Test/Suite')('User')
 const Factory =  use('Factory')
 const Config = use('Config')
 const Hash = use('Hash')
+const UserServices = use('App/Services/UserServices')
+const { ioc } = use('@adonisjs/fold')
+const Database = use('Database')
+const ace = require('@adonisjs/ace')
+const User = use('App/Models/User')
+const Suite = use('Test/Suite')('User')
 
 trait('Test/ApiClient')
 trait('DatabaseTransactions')
-// trait('Auth/Client')
-// trait('Session/Client')
 
 test('register_user_sucess', async ({ assert, client }) => {
   const data = {
@@ -17,7 +21,7 @@ test('register_user_sucess', async ({ assert, client }) => {
     password: '12345'
   }
 
-  const response = await client.post('/api/register')
+  const response = await client.post('/api/v1/auth/register')
     .send(data)
     .end()
 
@@ -28,19 +32,15 @@ test('register_user_sucess', async ({ assert, client }) => {
 
   response.assertStatus(Config.get('staticdata.http_status_code.success_data'))
   assert.deepEqual(response.body.data, data)
-  // response.assertJSON([{
-  //   title: 'Adonis 102',
-  //   description: 'Blog post contents'
-  // }])
 })
 
 test('register_user_validation_fail', async ({ assert, client }) => {
   const data = {
-    email: 'user1@mail.com',
+    email: 'user@mail.com',
     password: '12345'
   }
 
-  const response = await client.post('/api/register')
+  const response = await client.post('/api/v1/auth/register')
     .send(data)
     .end()
 
@@ -49,6 +49,33 @@ test('register_user_validation_fail', async ({ assert, client }) => {
       message: 'You must provide a username.',
       field: 'username',
       validation: 'required'
+    }
+  ]
+
+  response.assertError(expected_response)
+  response.assertStatus(Config.get('staticdata.http_status_code.unprocessable_entity'))
+})
+
+test('register_user_duplicate', async ({ assert, client }) => {
+  const exist_user = await Factory.model('App/Models/User').create({
+    email: 'user1@mail.com',
+    password: '12345'
+  })
+  const data = {
+    username: 'user1',
+    email: 'user1@mail.com',
+    password: '12345'
+  }
+
+  const response = await client.post('/api/v1/auth/register')
+    .send(data)
+    .end()
+
+  const expected_response = [
+    {
+      message: 'email unique validation failed.',
+      field: 'email',
+      validation: 'unique'
     }
   ]
 
@@ -68,12 +95,51 @@ test('login_user_sucess', async ({ assert, client }) => {
     password: decrypt_password
   }
 
-  const response = await client.post('/api/login')
+  const response = await client.post('/api/v1/auth/login')
     .send(data)
     .end()
 
   response.assertStatus(Config.get('staticdata.http_status_code.success_data'))
+  response.assertJSONSubset({
+    data: {
+      username: user.username,
+      email: user.email,
+      type: Config.get('staticdata.token_type.bearer')
+    }
+  })
   assert.isDefined(response.body.data.token)
   assert.isDefined(response.body.data.type)
 })
 
+test('login_user_validation_fail', async ({ assert, client }) => {
+  const decrypt_password = 'secret'
+  const user = await Factory.model('App/Models/User').create({
+    email: 'email.com',
+    password: null
+  })
+
+  const data = {
+    email: user.email,
+    password: null
+  }
+
+  const expected_response = [
+    {
+      message: 'email was invalid.',
+      field: 'email',
+      validation: 'email'
+    },
+    {
+      message: 'You must provide a password.',
+      field: 'password',
+      validation: 'required'
+    }
+  ]
+
+  const response = await client.post('/api/v1/auth/login')
+    .send(data)
+    .end()
+
+  response.assertStatus(Config.get('staticdata.http_status_code.unprocessable_entity'))
+  response.assertError(expected_response)
+})

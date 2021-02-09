@@ -20,12 +20,13 @@ const Route = use('Route')
 
 Route.group(() => {
   Route
-    .post('login', 'AuthController.login')
+    .post('/auth/login', 'AuthController.login')
     .validator('UserLoginRequest')
   Route
-    .post('register', 'AuthController.register')
+    .post('/auth/register', 'AuthController.register')
     .validator('UserRegisterRequest')
-}).prefix('/api')
+  Route.get('/auth/logout', 'AuthController.logout')
+}).prefix('/api/v1')
 
 Route.get('/', 'TodoController.index').as('Todo.index')
 Route.get('/create', 'TodoController.create').as('Todo.create')

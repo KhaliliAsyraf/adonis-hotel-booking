@@ -15,5 +15,10 @@ module.exports = {
         success_data: 201,
         unprocessable_entity: 422,
         error: 500
+    },
+
+    token_type : {
+        bearer: 'bearer',
+        jwt: 'jwt'
     }
 }

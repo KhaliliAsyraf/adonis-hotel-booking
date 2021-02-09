@@ -3,6 +3,7 @@
 const config = use('Config')
 const Permission = use('Adonis/Acl/Permission')
 const Role = use('App/Models/Role')
+const PermissionRole = use('App/Models/PermissionRole')
 
 /*
 |--------------------------------------------------------------------------
@@ -73,6 +74,8 @@ const permissions = [
 
 class PermissionSeeder {
   async run () {
+    PermissionRole.truncate()
+    Permission.truncate()
     // permission grouping
     for (let i in permissions) {
       const permission_grouping = permissions[i];

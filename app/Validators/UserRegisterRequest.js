@@ -10,7 +10,7 @@ class UserRegisterRequest {
   get rules () {
     return {
       username: 'required',
-      email: 'required|email',
+      email: 'required|email|unique:users,email',
       password: 'required'
     }
   }
@@ -18,7 +18,8 @@ class UserRegisterRequest {
   get messages () {
     return {
       'required': 'You must provide a {{ field }}.',
-      'email': '{{ field }} was invalid.'
+      'email': '{{ field }} was invalid.',
+      'email.unique': '{{ field }} unique validation failed.'
     }
   }
 

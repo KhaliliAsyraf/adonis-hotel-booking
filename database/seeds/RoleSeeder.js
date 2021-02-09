@@ -2,6 +2,7 @@
 
 const config = use('Config')
 const Role = use('Adonis/Acl/Role')
+const PermissionRole = use('App/Models/PermissionRole')
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,8 @@ const Factory = use('Factory')
 
 class RoleSeeder {
   async run () {
+    PermissionRole.truncate()
+    Role.truncate()
     const roles = config.get('staticdata.roles');
     var i = 0;
     for (i = 0; i < roles.length; i++) {
