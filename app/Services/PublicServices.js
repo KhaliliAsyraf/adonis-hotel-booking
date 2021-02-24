@@ -7,7 +7,7 @@ const Config = use('Config')
 
 class PublicServices {
     async covidStatistics ({request}) {
-        var url = 'https://api.coronatracker.com/v3/stats/worldometer/country?countryCode=' + request.input('country_code')
+        var url = Config.get('staticdata.public_covid_url') + request.input('country_code')
         var method = 'get'
         var accept = 'application/json'
 

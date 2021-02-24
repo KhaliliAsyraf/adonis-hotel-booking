@@ -1,0 +1,7 @@
+{
+    "hotel_create_success": "Hotel successfully created",
+    "hotel_create_fail": "Hotel failed to create",
+    "hotel_update_fail": "Hotel failed to update",
+    "hotel_update_success": "Hotel successfully updated",
+    "hotel_not_found": "Hotel not found"
+}

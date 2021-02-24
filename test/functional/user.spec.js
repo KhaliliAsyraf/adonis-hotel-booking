@@ -3,13 +3,6 @@
 const { test, trait } = use('Test/Suite')('User')
 const Factory =  use('Factory')
 const Config = use('Config')
-const Hash = use('Hash')
-const UserServices = use('App/Services/UserServices')
-const { ioc } = use('@adonisjs/fold')
-const Database = use('Database')
-const ace = require('@adonisjs/ace')
-const User = use('App/Models/User')
-const Suite = use('Test/Suite')('User')
 
 trait('Test/ApiClient')
 trait('DatabaseTransactions')

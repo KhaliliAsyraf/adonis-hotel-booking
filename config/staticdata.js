@@ -14,11 +14,16 @@ module.exports = {
         success: 200,
         success_data: 201,
         unprocessable_entity: 422,
+        forbidden: 403,
+        unauthorized: 403,
+        not_found: 404,
         error: 500
     },
 
     token_type : {
         bearer: 'bearer',
         jwt: 'jwt'
-    }
+    },
+
+    public_covid_url: Env.get('PUBLIC_COVID_URL', '')
 }

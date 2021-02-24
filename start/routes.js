@@ -30,9 +30,16 @@ Route.group(() => {
 
   // Hotel
   Route
-    .post('/admin/hotel', 'AuthController.login')
-    .validator('UserLoginRequest')
-}).prefix('/api/v1')
+    .post('/admin/hotel/create', 'Admin/HotelController.createHotel')
+    .middleware(['auth:api', 'can:create_hotel'])
+    .validator('Admin/Hotel/AdminCreateHotelRequest')
+  Route
+    .put('/admin/hotel/update/:hotel_id', 'Admin/HotelController.updateHotel')
+    .middleware(['auth:api', 'can:update_hotel'])
+    .validator('Admin/Hotel/AdminUpdateHotelRequest')
+})
+// .middleware(['auth:api'])
+.prefix('/api/v1')
 
 Route.get('/', 'TodoController.index').as('Todo.index')
 Route.get('/create', 'TodoController.create').as('Todo.create')

@@ -58,6 +58,7 @@ class UserServices {
                     'created_at',
                     'updated_at'
                 ];
+                
                 for (let i in unset) {
                     const hide = unset[i]
                     delete user[hide];

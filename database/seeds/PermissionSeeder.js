@@ -41,7 +41,16 @@ const permissions = [
               'admin'
             ]
           },
-        }
+        },
+        {
+          update_hotel: {
+            display_name: 'Update hotel',
+            role_access: [
+              'superadmin',
+              'admin'
+            ]
+          }
+        },
       ]
     }
   },

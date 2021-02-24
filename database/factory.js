@@ -23,8 +23,16 @@ Factory.blueprint('App/Models/User', async (faker, i, data) => {
 })
 
 Factory.blueprint('App/Models/Todo', (faker) => {
-    return {
-      title: faker.sentence(),
-      description: faker.paragraph()
-    }
-  })
+  return {
+    title: faker.sentence(),
+    description: faker.paragraph()
+  }
+})
+
+Factory.blueprint('App/Models/Hotel', async (faker, i, data) => {
+  return {
+    name: faker.name() + ' Hotel',
+    address: faker.address(),
+    is_active: true
+  }
+})

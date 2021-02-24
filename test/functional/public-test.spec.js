@@ -5,7 +5,7 @@ const Config = use('Config')
 
 trait('Test/ApiClient')
 
-test('getCovidStatsTest', async ({ assert, client }) => {
+test('test_get_covid_stats', async ({ assert, client }) => {
   var countryCode = 'MY'
   const response = await client.get('covid').query({ country_code: countryCode}).end()
   response.assertStatus(Config.get('staticdata.http_status_code.success_data'))
